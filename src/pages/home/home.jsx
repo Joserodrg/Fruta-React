@@ -1,10 +1,10 @@
-
+import { Card } from "../../components/card";
+import { TableCrud } from "../../components/table/table-view";
 export default function HomePage() {
   return (
     <>
-    <div>
-      <h1>Gestión Productos</h1>
-    </div>
+      <Card />
+      <TableCrud />
     </>
   );
 }
