@@ -1,40 +1,11 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import ProductForm from "../../components/Forms/Form";
+import Spinner from "react-bootstrap/Spinner";
 
-export default function EditProduct() {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const [product, setProduct] = useState(null);
-
-  useEffect(() => {
-    fetch(`http://localhost:5001/productos/${id}`)
-      .then((response) => response.json())
-      .then((data) => setProduct(data))
-      .catch((error) => console.error("Error obteniendo producto:", error));
-  }, [id]);
-
-  const handleUpdate = (updatedProduct) => {
-    fetch(`http://localhost:5001/productos/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedProduct),
-    })
-      .then((response) => response.json())
-      .then(() => {
-        navigate("/");
-      })
-      .catch((error) => console.error("Error actualizando producto:", error));
-  };
-
+function BasicExample() {
   return (
-    <div>
-      <h2>Editar Producto</h2>
-      {product ? (
-        <ProductForm initialData={product} onSubmit={handleUpdate} />
-      ) : (
-        <p>Cargando...</p>
-      )}
-    </div>
+    <Spinner animation="border" role="status">
+      <span className="visually-hidden">Loading...</span>
+    </Spinner>
   );
 }
+
+export default BasicExample;

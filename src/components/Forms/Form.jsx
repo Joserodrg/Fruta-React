@@ -4,17 +4,17 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
 export default function ProductForm({ initialData, onSubmit }) {
-  const [product, setProduct] = useState(
-    initialData || {
-      nombre: "",
-      tipo: "",
-      precio: "",
-      stock: "",
-    }
-  );
+  const [product, setProduct] = useState({
+    nombre: "",
+    tipo: "",
+    precio: "",
+    stock: "",
+  });
 
   useEffect(() => {
-    setProduct(initialData || { nombre: "", tipo: "", precio: "", stock: "" });
+    if (initialData) {
+      setProduct(initialData);
+    }
   }, [initialData]);
 
   const handleChange = (e) => {

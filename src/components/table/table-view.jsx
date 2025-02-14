@@ -1,13 +1,14 @@
-// TableCrud.js
+// TableCrud.jsx
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import DeleteButton from "../DeleteButton";
 import EditButton from "../EditButton";
-import ProductForm from "../Forms/Form";
 import { fetchAllProducts } from "../../api/api";
+import CreateButton from "../CreateButton";
 
 export function TableCrud() {
   const [products, setProducts] = useState([]);
-  const [editingProduct, setEditingProduct] = useState(null);
+  const navigate = useNavigate();
 
   const fetchProducts = () => {
     fetchAllProducts()
@@ -19,7 +20,6 @@ export function TableCrud() {
     fetchProducts();
   }, []);
 
-  // Eliminar un producto
   const removeData = (id) => {
     fetch(`http://localhost:5001/productos/${id}`, {
       method: "DELETE",
@@ -33,34 +33,18 @@ export function TableCrud() {
       });
   };
 
-  // Establecer producto en edición
   const editItem = (product) => {
-    setEditingProduct(product);
+    navigate(`/editfruta/${product.id}`);
   };
 
-  // Actualizar producto en el backend y en la tabla
-  const handleUpdate = (updatedProduct) => {
-    fetch(`http://localhost:5001/productos/${updatedProduct.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedProduct),
-    })
-      .then((response) => response.json())
-      .then(() => {
-        // Actualizar el estado de los productos sin necesidad de un fetch completo
-        setProducts((prevProducts) =>
-          prevProducts.map((product) =>
-            product.id === updatedProduct.id ? updatedProduct : product
-          )
-        );
-        setEditingProduct(null); // Cerrar formulario de edición
-      })
-      .catch((error) => console.error("Error actualizando producto:", error));
+  const NewProduct = () => {
+    navigate("/createfruta");
   };
 
   return (
     <div>
       <h2>Lista de Productos</h2>
+      <CreateButton onClick={NewProduct} />
       <table className="table table-striped">
         <thead>
           <tr>
@@ -80,20 +64,12 @@ export function TableCrud() {
               <td>{product.stock}</td>
               <td>
                 <DeleteButton onClick={() => removeData(product.id)} />
-                <EditButton onClick={() => editItem(product)} />
+                <EditButton onClick={() => editItem(product)} />{" "}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-
-      {editingProduct && (
-        <div>
-          <h3>Editar Producto</h3>
-          <ProductForm initialData={editingProduct} onSubmit={handleUpdate} />
-          <button onClick={() => setEditingProduct(null)}>Cancelar</button>
-        </div>
-      )}
     </div>
   );
 }
